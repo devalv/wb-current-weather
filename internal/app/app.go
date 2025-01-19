@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/devalv/go-boiler/internal/config"
+	"github.com/devalv/wb-current-weather/internal/config"
 )
 
 type Application struct {

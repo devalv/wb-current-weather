@@ -1,4 +1,4 @@
-# TODO: should be renaimed
+# wb-current-weather
 
 <!-- [![Go Report Card](https://goreportcard.com/badge/github.com/devalv/wb-inbox-mail-count)](https://goreportcard.com/report/github.com/devalv/wb-inbox-mail-count) -->
 <!-- [![CodeQL](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/codeql-analysis.yml) -->
@@ -37,7 +37,7 @@ make setup
 
 ## Структура проекта
 ```
-go-boiler/
+wb-current-weather/
 ├── cmd/
 │   └── app/
 │       └── main.go

@@ -1,5 +1,4 @@
-// TODO: rename module
-module github.com/devalv/go-boiler
+module github.com/devalv/wb-current-weather
 
 go 1.23.4
 
