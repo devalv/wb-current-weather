@@ -11,8 +11,12 @@ import (
 )
 
 type Config struct {
-	Debug      bool `yaml:"debug"`
-	ConfigPath string
+	Debug           bool   `yaml:"debug"`
+	CityID          int    `yaml:"city_id"`
+	WeatherAPIToken string `yaml:"weather_api_token"`
+	Units           string `yaml:"units"`
+	Lang            string `yaml:"lang"`
+	ConfigPath      string
 }
 
 func validateConfigPath(path string) error {

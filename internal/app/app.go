@@ -19,7 +19,7 @@ func NewApplication(cfg *config.Config) *Application {
 }
 
 func (app *Application) Start(ctx context.Context) {
-	log.Debug().Msg("Starting mail application")
+	log.Debug().Msg("Starting weather application")
 	app.Stop(ctx)
 }
 

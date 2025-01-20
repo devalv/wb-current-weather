@@ -8,7 +8,9 @@
 TODO: заполнить
 
 ## Установка и конфигурация
-TODO: заполнить
+В качестве результата выполнение будет отображение текущего прогноза погоды для выбранного города.
+Источником будет выступать https://openweathermap.org/current#cityid, согласно запросу https://api.openweathermap.org/data/2.5/weather?id={city id}&appid={API key}&units={units}&lang={lang}
+ID города можно взять [тут](https://bulk.openweathermap.org/sample/)
 
 ### Установка собранного bin-файла
 TODO: заполнить
@@ -16,6 +18,10 @@ TODO: заполнить
 ### Содержимое конфигурационного файла приложения (config.yml)
 ```
 debug: false
+city_id: 498817
+weather_api_token: "you-api-key"
+units: "metric"
+lang: "ru"
 ```
 
 ## Установка для разработки
