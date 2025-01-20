@@ -26,4 +26,4 @@ build:
 	go build -o application ./cmd/app
 
 run:
-	go run ./cmd/app
+	go run ./cmd/app --config ./config-local.yml
