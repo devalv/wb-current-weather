@@ -1,19 +1,24 @@
 # wb-current-weather
+[![Go Report Card](https://goreportcard.com/badge/github.com/devalv/wb-current-weather)](https://goreportcard.com/report/github.com/devalv/wb-current-weather)
+[![CodeQL](https://github.com/devalv/wb-current-weather/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/devalv/wb-current-weather/actions/workflows/github-code-scanning/codeql)
+[![CodeQL](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/github-code-scanning/codeql)
 
-<!-- [![Go Report Card](https://goreportcard.com/badge/github.com/devalv/wb-inbox-mail-count)](https://goreportcard.com/report/github.com/devalv/wb-inbox-mail-count) -->
-<!-- [![CodeQL](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/codeql-analysis.yml) -->
-<!-- [![codecov](https://codecov.io/gh/devalv/wb-inbox-mail-count/branch/main/graph/badge.svg)](https://codecov.io/gh/devalv/wb-inbox-mail-count) -->
-
-## TODO: пример работы
-TODO: заполнить
+## Отображение текущей погоды
+![пример](example.jpg)
 
 ## Установка и конфигурация
-В качестве результата выполнение будет отображение текущего прогноза погоды для выбранного города.
-Источником будет выступать https://openweathermap.org/current#cityid, согласно запросу https://api.openweathermap.org/data/2.5/weather?id={city id}&appid={API key}&units={units}&lang={lang}
-ID города можно взять [тут](https://bulk.openweathermap.org/sample/)
+Результатом работы будет отображение текущего прогноза погоды для выбранного города.
+Данные будут получены от [OpenWeather](https://openweathermap.org/current#cityid), с помощью API v2.5
+(https://api.openweathermap.org/data/2.5/weather?id={city id}&appid={API key}&units={units}&lang={lang})
+Перед началом работы Вам необходимо найти ID города [тут](https://bulk.openweathermap.org/sample/) и получить собственный API-ключ для обращения к API.
 
 ### Установка собранного bin-файла
-TODO: заполнить
+1. Загрузите соответствующую версию из раздела [релизы](https://github.com/devalv/wb-current-weather/releases)
+2. Скопируйте исполняемый файл в /usr/local/bin (или иной каталог доступный waybar на запуск)
+3. Создайте файл-конфигурации по инструкции описанной ниже
+4. Проверьте запуск командой `wbcw -config /home/user/.config/wb-current-weather/config.yml`
+5. Если на 4м шаге произошли ошибки - активируйте ключ debug в config.yml и повторите запуск
+6. Добавьте отображение статуса в waybar (инструкция ниже)
 
 ### Содержимое конфигурационного файла приложения (config.yml)
 ```
@@ -22,6 +27,40 @@ city_id: 498817
 weather_api_token: "you-api-key"
 units: "metric"
 lang: "ru"
+```
+
+### Добавление запуска в waybar (~/.config/waybar/config.jsonc)
+1. Добавьте отображение вывода в раздел **modules-right** (или иной)
+```json
+"modules-right": [
+    ...
+    "battery",
+    "custom/wbcw",
+    ...
+],
+```
+2. Добавьте обработчик вывода
+```json
+    ...
+   "custom/wbcw": {
+     "exec" : "wbcw -config /home/user/.config/wb-current-weather/config.yml",
+    "return-type": "json",
+    "interval": 300,
+     "format": "{}"
+    },
+    "battery": {
+        "format": "{icon} {capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    ...
+```
+
+### Настройка отступов для waybar (~/.config/waybar/style.css)
+```css
+#custom-wbcw {
+    color: @text;
+    padding-right: 13px;
+ }
 ```
 
 ## Установка для разработки
@@ -62,7 +101,9 @@ wb-current-weather/
 │   │   └── consts/
 |   |       └──consts.go
 |   ├── usecase/             // Бизнес логика
+|   |   ├── forecast.go
 │   │   └── waybar.go
+
 ```
 
 <!-- ## Сборка deb-пакета -->

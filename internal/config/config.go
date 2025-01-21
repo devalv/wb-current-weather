@@ -55,6 +55,11 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: default units
+	// TODO: default lang
+	// TODO: default city_id
+
 	cfg.ConfigPath = cfgPath
 	cfg.ConfigureLogger()
 	return &cfg, nil
