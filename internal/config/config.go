@@ -56,9 +56,13 @@ func NewConfig() (*Config, error) {
 		return nil, err
 	}
 
-	// TODO: default units
-	// TODO: default lang
-	// TODO: default city_id
+	if cfg.Units == "" {
+		cfg.Units = "metric"
+	}
+
+	if cfg.Lang == "" {
+		cfg.Lang = "ru"
+	}
 
 	cfg.ConfigPath = cfgPath
 	cfg.ConfigureLogger()

@@ -29,6 +29,10 @@ units: "metric"
 lang: "ru"
 ```
 
+#### Параметры по-умолчанию:
+    units - metric
+    lang  - ru
+
 ### Добавление запуска в waybar (~/.config/waybar/config.jsonc)
 1. Добавьте отображение вывода в раздел **modules-right** (или иной)
 ```json
