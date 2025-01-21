@@ -1,1 +1,5 @@
-debug: true
+debug: false
+city_id: 498817
+weather_api_token: "you-api-key"
+units: "metric"
+lang: "ru"

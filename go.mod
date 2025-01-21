@@ -1,9 +1,8 @@
-// TODO: rename module
-module github.com/devalv/go-boiler
+module github.com/devalv/wb-current-weather
 
 go 1.23.4
 
-require github.com/rs/zerolog v1.30.0
+require github.com/rs/zerolog v1.33.0
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect

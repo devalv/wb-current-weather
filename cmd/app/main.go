@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/devalv/go-boiler/internal/app"
-	"github.com/devalv/go-boiler/internal/config"
+	"github.com/devalv/wb-current-weather/internal/app"
+	"github.com/devalv/wb-current-weather/internal/config"
 
 	"github.com/rs/zerolog/log"
 )
