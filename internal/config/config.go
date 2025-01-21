@@ -11,8 +11,12 @@ import (
 )
 
 type Config struct {
-	Debug      bool `yaml:"debug"`
-	ConfigPath string
+	Debug           bool   `yaml:"debug"`
+	CityID          int    `yaml:"city_id"`
+	WeatherAPIToken string `yaml:"weather_api_token"`
+	Units           string `yaml:"units"`
+	Lang            string `yaml:"lang"`
+	ConfigPath      string
 }
 
 func validateConfigPath(path string) error {
@@ -51,6 +55,15 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if cfg.Units == "" {
+		cfg.Units = "metric"
+	}
+
+	if cfg.Lang == "" {
+		cfg.Lang = "ru"
+	}
+
 	cfg.ConfigPath = cfgPath
 	cfg.ConfigureLogger()
 	return &cfg, nil
