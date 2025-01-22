@@ -23,7 +23,7 @@ type main struct {
 }
 
 type wind struct {
-	Speed int `json:"speed"`
+	Speed float32 `json:"speed"`
 }
 
 type forecastResponse struct {

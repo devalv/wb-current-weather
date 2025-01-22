@@ -6,13 +6,13 @@ type Forecast struct {
 	Description string  `json:"description"`
 	Icon        string  `json:"icon"`
 	Temp        float32 `json:"temp"`
-	Wind        int     `json:"wind"`
+	Wind        float32 `json:"wind"`
 }
 
 func (f *Forecast) TooltipInfo() []string {
 	return []string{
 		fmt.Sprintf("Температура: %.1f", f.Temp),
-		fmt.Sprintf("Скорость ветра: %d", f.Wind),
+		fmt.Sprintf("Скорость ветра: %.1f", f.Wind),
 		fmt.Sprintf("Описание: %s", f.Description),
 	}
 }
