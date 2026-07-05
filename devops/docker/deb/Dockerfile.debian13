@@ -18,9 +18,7 @@ ARG PACKAGE_ARCH=amd64
 RUN set -e && \
     apt-get update || exit 1 && \
     apt-get install -y -q --no-install-recommends \
-    ca-certificates=20230311+deb12u1 \
-    make=4.3-4.1+b4 \
-    dpkg-dev=1.21.22.astra.se5b1  || exit 1 && \
+    dpkg-dev=1.22.22  || exit 1 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
