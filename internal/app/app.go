@@ -18,6 +18,7 @@ type Application struct {
 
 func NewApplication(cfg *config.Config) *Application {
 	app := &Application{cfg: cfg}
+
 	return app
 }
 
@@ -26,6 +27,7 @@ func (app *Application) getForecast(ctx context.Context) (fc usecase.Forecast, e
 	if err != nil {
 		return usecase.Forecast{}, err
 	}
+
 	return f, nil
 }
 

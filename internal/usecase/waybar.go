@@ -16,8 +16,10 @@ func (wo WaybarOutput) String() string {
 	val, err := json.Marshal(wo)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to marshal waybar output")
+
 		return ""
 	}
+
 	return string(val)
 }
 

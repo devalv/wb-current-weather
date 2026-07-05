@@ -1,29 +1,33 @@
 setup:
-	go install golang.org/x/tools/gopls@latest
 	go install golang.org/x/tools/cmd/goimports@latest
-	go install github.com/securego/gosec/v2/cmd/gosec@latest
 	go install mvdan.cc/gofumpt@latest
-	go install github.com/sqs/goreturns@latest
-	go install -v github.com/go-critic/go-critic/cmd/gocritic@latest
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.63.4
-	pip install pre-commit
-	pre-commit install
 
 fmt:
-	gofmt -w -s ./internal
-	goimports -w ./internal
-	gofumpt -w ./internal
 	go mod tidy
+	go fix -diff ./...
+	golangci-lint run --fix ./cmd/... ./internal/...
 
 test:
-	go test ./... -race
+	go test ./... -race -timeout=5m -v
 
 cover:
 	go test ./... -race -cover
 
 build:
 	$(MAKE) fmt
+	go env -w CGO_ENABLED=0
+	go env -w GOOS=linux
+	go env -w GOARCH=amd64
 	go build -o application ./cmd/app
+
+build-deb:
+	@if [ -z "$(VERSION)" ]; then \
+		echo "Usage: make build-deb VERSION=1.2.3"; \
+		exit 1; \
+	fi
+	PACKAGE_VERSION="$(VERSION)" ./devops/build-deb.sh
 
 run:
 	go run ./cmd/app --config ./config-local.yml
+
+.PHONY: setup fmt test build cover run build-deb

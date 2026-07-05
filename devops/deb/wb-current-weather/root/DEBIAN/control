@@ -1,0 +1,7 @@
+Package: wb-current-weather
+Version: 0.0.0
+Section: net
+Priority: optional
+Architecture: amd64
+Maintainer: Aleksei Devyatkin <wb-current-weather@devyatkin.dev>
+Description: Console util for waybar

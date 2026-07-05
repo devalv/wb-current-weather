@@ -66,6 +66,7 @@ func NewConfig() (*Config, error) {
 
 	cfg.ConfigPath = cfgPath
 	cfg.ConfigureLogger()
+
 	return &cfg, nil
 }
 

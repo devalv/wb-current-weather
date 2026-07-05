@@ -1,6 +1,6 @@
 module github.com/devalv/wb-current-weather
 
-go 1.23.4
+go 1.26.4
 
 require github.com/rs/zerolog v1.35.1
 

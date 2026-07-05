@@ -1,0 +1,50 @@
+name: Build binary app artifact
+on:
+  release:
+    types: [created]
+
+  # Ручной запуск из интерфейса GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Для загрузки артефактов в релиз
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Полная история для тегов
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.26'
+
+    - name: Download Go modules
+      run: go mod download
+
+    - name: Build
+      run: |
+        go env -w CGO_ENABLED=0
+        go env -w GOOS=linux
+        go env -w GOARCH=amd64
+        go build -o wb-current-weather ./cmd/app
+
+    - name: Upload artifact to GitHub Releases (if triggered by release)
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./wb-current-weather
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload artifact as workflow artifact (for manual runs)
+      if: github.event_name != 'release'
+      uses: actions/upload-artifact@v4
+      with:
+        name: wb-current-weather
+        path: ./wb-current-weather
+        retention-days: 7
