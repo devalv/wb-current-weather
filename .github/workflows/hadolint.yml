@@ -12,11 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Find and lint Dockerfiles
-        run: |
-          # Находим все Dockerfile* файлы
-          find . -type f -name "Dockerfile*" ! -path "./.git/*" | while read file; do
-            echo "=== Linting $file ==="
-            docker run --rm -i hadolint/hadolint hadolint --ignore DL3059 - < "$file"
-          done
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.debian13
