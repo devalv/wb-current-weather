@@ -14,4 +14,4 @@ jobs:
         uses: actions/checkout@v4
       - uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: Dockerfile.debian13
+          dockerfile: devops/docker/deb/Dockerfile.debian13
