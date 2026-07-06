@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+.DS_Store
 
 # Test binary, built with `go test -c`
 *.test
@@ -30,6 +31,16 @@ go.work
 *.env
 *netrc
 config-local.yml
+config.yml
+./config.yml
+*.crt
+*.csr
+*.key
+./certs
+*.log
+*.db
 
 # Build artifacts
 application
+.DS_Store
+wb-current-*.deb

@@ -14,9 +14,9 @@
 
 ### Установка собранного bin-файла
 1. Загрузите соответствующую версию из раздела [релизы](https://github.com/devalv/wb-current-weather/releases)
-2. Скопируйте исполняемый файл в /usr/local/bin (или иной каталог доступный waybar на запуск)
+2. Скопируйте исполняемый файл в /usr/local/bin (или иной каталог доступный waybar на запуск) или установите deb-пакет
 3. Создайте файл-конфигурации по инструкции описанной ниже
-4. Проверьте запуск командой `wbcw -config /home/user/.config/wb-current-weather/config.yml`
+4. Проверьте запуск командой `wb-current-weather -config /home/user/.config/wb-current-weather.yml`
 5. Если на 4м шаге произошли ошибки - активируйте ключ debug в config.yml и повторите запуск
 6. Добавьте отображение статуса в waybar (инструкция ниже)
 
@@ -47,7 +47,7 @@ lang: "ru"
 ```json
     ...
    "custom/wbcw": {
-     "exec" : "wbcw -config /home/user/.config/wb-current-weather/config.yml",
+     "exec" : "wb-current-weather -config /home/user/.config/wb-current-weather.yml",
     "return-type": "json",
     "interval": 300,
      "format": "{}"
@@ -67,23 +67,6 @@ lang: "ru"
  }
 ```
 
-## Установка для разработки
-1. Убедитесь, что установлена подходящая версия [Go](https://go.dev/dl/) - **1.23**.
-
-2. Запустите **make** команду для установки утилит разработки.
-
-```bash
-make setup
-```
-
-### Make команды
-- **setup**   - установка утилит для разработки/проверки
-- **fmt**     - запуск gofmt и goimports
-- **test**    - запуск тестов
-- **cover**   - вывод % покрытия тестов
-- **build**   - сборка исполняемого файла
-
-
 ## Структура проекта
 ```
 wb-current-weather/
@@ -97,24 +80,17 @@ wb-current-weather/
 │   │   └── config.go
 |   ├── transport/           // Часть на получение внутри
 │   │   ├── http/
-│   │   ├── grpc/
-│   │   └── messaging/       // Консьюмеры
-|   ├── domain/              // Обобщенные структуры / константы / ошибки
-|   |   ├── models/
-│   │   ├── errors/
-│   │   └── consts/
-|   |       └──consts.go
-|   ├── usecase/             // Бизнес логика
+|   ├── usecase/
 |   |   ├── forecast.go
 │   │   └── waybar.go
 
 ```
 
-<!-- ## Сборка deb-пакета -->
-<!-- TODO: актуализировать для v0.2 -->
+## Сборка deb-пакета
 
-## TODO v0.2
-- TODO: автоматизировать сборку deb-пакета в github
-- TODO: автоматизировать сборку bin-артефактов в github
-- TODO: тесты
-- TODO: сборка debian-пакета
+### Локальная проверка сборки
+```bash
+make build-deb VERSION=0.2.0
+```
+
+Автоматизированная сборка и публикация на github работает по релизному тегу.

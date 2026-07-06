@@ -13,7 +13,7 @@ func (f *Forecast) TooltipInfo() []string {
 	return []string{
 		fmt.Sprintf("Температура: %.1f", f.Temp),
 		fmt.Sprintf("Скорость ветра: %.1f", f.Wind),
-		fmt.Sprintf("Описание: %s", f.Description),
+		"Описание: " + f.Description,
 	}
 }
 
@@ -43,5 +43,6 @@ func (f *Forecast) Text() string {
 	if i == "" {
 		i = "🌡️"
 	}
+
 	return fmt.Sprintf("%.0f | %s", f.Temp, i)
 }

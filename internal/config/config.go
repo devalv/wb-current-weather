@@ -1,8 +1,10 @@
 package config
 
 import (
+	"errors"
 	"flag"
 	"fmt"
+	"io/fs"
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -22,7 +24,11 @@ type Config struct {
 func validateConfigPath(path string) error {
 	s, err := os.Stat(path)
 	if err != nil {
-		return err
+		if errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("failed to read config file: %w", err)
+		}
+
+		return fmt.Errorf("failed to get config path stat: %w", err)
 	}
 
 	if s.IsDir() {
@@ -53,7 +59,7 @@ func NewConfig() (*Config, error) {
 	var cfg Config
 	err = cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("config read err: %w", err)
 	}
 
 	if cfg.Units == "" {
@@ -65,11 +71,12 @@ func NewConfig() (*Config, error) {
 	}
 
 	cfg.ConfigPath = cfgPath
-	cfg.ConfigureLogger()
+	cfg.configureLogger()
+
 	return &cfg, nil
 }
 
-func (cfg *Config) ConfigureLogger() {
+func (cfg *Config) configureLogger() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
 	if cfg.Debug {
