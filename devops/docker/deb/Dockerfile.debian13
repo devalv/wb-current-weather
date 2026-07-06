@@ -30,12 +30,12 @@ RUN sed "s/@PACKAGE_VERSION@/${PACKAGE_VERSION}/g" \
     devops/deb/wb-current-weather/root/DEBIAN/control.tpl > \
     devops/deb/wb-current-weather/root/DEBIAN/control
 
-# TODO: /usr/local/bin?
-RUN install -m 0755 /tmp/wb-current-weather devops/deb/wb-current-weather/root/opt/wb-current-weather/wb-current-weather
+RUN install -m 0755 /tmp/wb-current-weather devops/deb/wb-current-weather/root/usr/local/bin/wb-current-weather
 
 RUN rm -f \
-    devops/deb/wb-current-weather/root/DEBIAN/control.tpl \
-    devops/deb/wb-current-weather/root/opt/wb-current-weather/.gitkeep
+    devops/deb/wb-current-weather/root/DEBIAN/control.tpl\
+    devops/deb/wb-current-weather/root/usr/local/bin/.gitkeep
+
 
 RUN dpkg-deb --build \
     devops/deb/wb-current-weather/root \

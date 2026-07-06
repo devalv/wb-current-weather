@@ -22,15 +22,6 @@ func NewApplication(cfg *config.Config) *Application {
 	return app
 }
 
-func (app *Application) getForecast(ctx context.Context) (fc usecase.Forecast, err error) {
-	f, err := transport.GetForecast(ctx, app.cfg)
-	if err != nil {
-		return usecase.Forecast{}, err
-	}
-
-	return f, nil
-}
-
 func (app *Application) Start(ctx context.Context) {
 	log.Debug().Msg("Starting weather application")
 	fc, err := app.getForecast(ctx)
@@ -50,4 +41,13 @@ func (app *Application) Start(ctx context.Context) {
 func (app *Application) Stop(ctx context.Context) {
 	log.Debug().Msg("Application stopped")
 	os.Exit(0)
+}
+
+func (app *Application) getForecast(ctx context.Context) (fc usecase.Forecast, err error) {
+	f, err := transport.GetForecast(ctx, app.cfg)
+	if err != nil {
+		return usecase.Forecast{}, fmt.Errorf("get forecast err: %w", err)
+	}
+
+	return f, nil
 }

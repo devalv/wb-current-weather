@@ -17,8 +17,8 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to read config")
 	}
-
 	log.Debug().Msgf("Config is: `%v`", cfg)
+
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, syscall.SIGSEGV)
 	defer cancel()
 
@@ -27,6 +27,4 @@ func main() {
 	<-ctx.Done()
 
 	app.Stop(ctx)
-
-	// TODO: при первом запуске должна проверять наличие пользовательского конфигурационного файла в ~/.config/your-app/ или ~/.your-apprc
 }

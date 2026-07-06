@@ -28,6 +28,6 @@ build-deb:
 	PACKAGE_VERSION="$(VERSION)" ./devops/build-deb.sh
 
 run:
-	go run ./cmd/app --config ./config-local.yml
+	go run ./cmd/app
 
 .PHONY: setup fmt test build cover run build-deb

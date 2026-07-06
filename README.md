@@ -80,19 +80,17 @@ wb-current-weather/
 │   │   └── config.go
 |   ├── transport/           // Часть на получение внутри
 │   │   ├── http/
-│   │   ├── grpc/
-│   │   └── messaging/       // Консьюмеры
-|   ├── domain/              // Обобщенные структуры / константы / ошибки
-|   |   ├── models/
-│   │   ├── errors/
-│   │   └── consts/
-|   |       └──consts.go
-|   ├── usecase/             // Бизнес логика
+|   ├── usecase/
 |   |   ├── forecast.go
 │   │   └── waybar.go
 
 ```
 
 ## Сборка deb-пакета
-- TODO: автоматизировать сборку deb-пакета в github
-- TODO: автоматизировать сборку bin-артефактов в github
+
+### Локальная проверка сборки
+```bash
+make build-deb VERSION=0.2.0
+```
+
+Автоматизированная сборка и публикация на github работает по релизному тегу.
