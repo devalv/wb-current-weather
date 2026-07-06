@@ -14,9 +14,9 @@
 
 ### Установка собранного bin-файла
 1. Загрузите соответствующую версию из раздела [релизы](https://github.com/devalv/wb-current-weather/releases)
-2. Скопируйте исполняемый файл в /usr/local/bin (или иной каталог доступный waybar на запуск)
+2. Скопируйте исполняемый файл в /usr/local/bin (или иной каталог доступный waybar на запуск) или установите deb-пакет
 3. Создайте файл-конфигурации по инструкции описанной ниже
-4. Проверьте запуск командой `wbcw -config /home/user/.config/wb-current-weather/config.yml`
+4. Проверьте запуск командой `wb-current-weather -config /home/user/.config/wb-current-weather.yml`
 5. Если на 4м шаге произошли ошибки - активируйте ключ debug в config.yml и повторите запуск
 6. Добавьте отображение статуса в waybar (инструкция ниже)
 
@@ -47,7 +47,7 @@ lang: "ru"
 ```json
     ...
    "custom/wbcw": {
-     "exec" : "wbcw -config /home/user/.config/wb-current-weather/config.yml",
+     "exec" : "wb-current-weather -config /home/user/.config/wb-current-weather.yml",
     "return-type": "json",
     "interval": 300,
      "format": "{}"
