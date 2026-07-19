@@ -4,8 +4,8 @@ setup:
 
 fmt:
 	go mod tidy
-	go fix -diff ./...
-	golangci-lint run --fix ./cmd/... ./internal/...
+	go fix -diff main.go
+	golangci-lint run --fix main.go
 
 test:
 	go test ./... -race -timeout=5m -v
@@ -28,6 +28,6 @@ build-deb:
 	PACKAGE_VERSION="$(VERSION)" ./devops/build-deb.sh
 
 run:
-	go run ./cmd/app
+	go run main.go
 
 .PHONY: setup fmt test build cover run build-deb
