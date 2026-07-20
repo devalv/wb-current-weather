@@ -25,6 +25,5 @@ jobs:
         with:
           scan-type: "fs" # Scan the file system
           format: "table"
-          severity: "CRITICAL,HIGH,MEDIUM"
           exit-code: "1"
           ignore-unfixed: true
