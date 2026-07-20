@@ -31,7 +31,7 @@ jobs:
         go env -w CGO_ENABLED=0
         go env -w GOOS=linux
         go env -w GOARCH=amd64
-        go build -o wb-current-weather ./cmd/app
+        go build -o wb-current-weather main.go
 
     - name: Upload artifact to GitHub Releases (if triggered by release)
       if: github.event_name == 'release'

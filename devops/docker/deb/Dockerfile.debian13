@@ -8,7 +8,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=${PACKAGE_ARCH} go build -trimpath -ldflags="-s -w" -o /tmp/wb-current-weather ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${PACKAGE_ARCH} go build -trimpath -ldflags="-s -w" -o /tmp/wb-current-weather main.go
 
 FROM debian:trixie-slim AS builder
 

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
@@ -170,7 +171,6 @@ func GetForecast(ctx context.Context, cfg *Config) (fc *Forecast, err error) {
 
 		return nil, fmt.Errorf("http response code: %v", res.StatusCode)
 	}
-	log.Debug().Msgf("http response code: %v", res.StatusCode)
 
 	var f forecastResponse
 	err = json.NewDecoder(res.Body).Decode(&f)
@@ -188,10 +188,10 @@ func GetForecast(ctx context.Context, cfg *Config) (fc *Forecast, err error) {
 	}, nil
 }
 
-func main() {
+func run() error {
 	cfg, err := NewConfig()
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to read config")
+		return fmt.Errorf("failed to read config %w", err)
 	}
 
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, syscall.SIGSEGV)
@@ -199,10 +199,10 @@ func main() {
 
 	fc, err := GetForecast(ctx, cfg)
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to get forecast")
+		return fmt.Errorf("failed to get forecast: %w", err)
 	}
 	if fc == nil {
-		log.Fatal().Msg("received nil forecast without error")
+		return errors.New("received nil forecast without error")
 	}
 
 	wo := &WaybarOutput{
@@ -211,4 +211,12 @@ func main() {
 	}
 
 	fmt.Println(wo)
+
+	return nil
+}
+
+func main() {
+	if err := run(); err != nil {
+		log.Fatal().Err(err).Msg("application failed")
+	}
 }
