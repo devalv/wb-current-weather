@@ -11,13 +11,12 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
-
-const apiURL = "https://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s&units=%s&lang=%s"
 
 type Config struct {
 	Debug           bool   `yaml:"debug"`
@@ -147,16 +146,24 @@ type forecastResponse struct {
 }
 
 func GetForecast(ctx context.Context, cfg *Config) (fc *Forecast, err error) {
+	const timeout = 15 * time.Second
+	const apiURL = "https://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s&units=%s&lang=%s"
+
 	requestURL := fmt.Sprintf(apiURL, cfg.CityID, cfg.WeatherAPIToken, cfg.Units, cfg.Lang)
 
-	// TODO: context with timeout
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, http.NoBody)
 	if err != nil {
 		return nil, fmt.Errorf("error creating http request: %w", err)
 	}
 
-	// TODO: client with timeout
-	res, err := http.DefaultClient.Do(req)
+	apiClient := &http.Client{
+		Timeout: timeout,
+	}
+
+	res, err := apiClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("making http request err: %w", err)
 	}
