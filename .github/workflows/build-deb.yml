@@ -16,12 +16,11 @@ jobs:
         fetch-depth: 0  # Полная история для тегов
 
     - name: Extract version from release tag
+      env:
+        # <<< Данные передаются через переменную окружения >>>
+        RAW_TAG: ${{ github.ref }}
       run: |
-        # Извлекаем имя тега релиза (например, refs/tags/v0.1.0)
-        TAG_NAME="${{ github.ref }}"
-        # Удаляем префикс refs/tags/
-        TAG_NAME="${TAG_NAME#refs/tags/}"
-        # Удаляем префикс v из версии (v0.1.0 -> 0.1.0)
+        TAG_NAME="${RAW_TAG#refs/tags/}"
         VERSION="${TAG_NAME#v}"
         echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
         echo "Extracted version: $VERSION"
