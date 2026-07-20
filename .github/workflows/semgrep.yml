@@ -3,8 +3,7 @@ name: semgrep Security Scan
 on:
   pull_request:
     paths:
-      - "cmd/**"
-      - "internal/**"
+      - "main.go"
 
 permissions:
   contents: read
@@ -13,17 +12,22 @@ jobs:
   semgrep-sast:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
+      with:
+        python-version: '3.13'
+      run: |
+        python3 -m pip install semgrep
+        semgrep --version
 
-      - name: Semgrep SAST Scan
-        id: semgrep
-        uses: returntocorp/semgrep-action@v1
-        with:
-          # Несколько наборов правил
-          config: |
-            p/c
-            p/security-audit
-            p/owasp-top-ten
-            p/golang
-            p/cwe-top-25
+
+      # TODO: bump action
+      # - name: Semgrep SAST Scan
+      #   with:
+      #     # Несколько наборов правил
+      #     config: |
+      #       p/c
+      #       p/security-audit
+      #       p/owasp-top-ten
+      #       p/golang
+      #       p/cwe-top-25

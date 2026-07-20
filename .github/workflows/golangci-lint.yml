@@ -3,8 +3,7 @@ name: golangci-lint
 on:
   pull_request:
     paths:
-      - 'cmd/**'
-      - 'internal/**'
+      - 'main.go'
       - 'go.mod'
       - 'go.sum'
       - '.golangci.yml'
