@@ -1,7 +1,5 @@
 # wb-current-weather
-[![Go Report Card](https://goreportcard.com/badge/github.com/devalv/wb-current-weather)](https://goreportcard.com/report/github.com/devalv/wb-current-weather)
 [![CodeQL](https://github.com/devalv/wb-current-weather/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/devalv/wb-current-weather/actions/workflows/github-code-scanning/codeql)
-[![CodeQL](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/devalv/wb-inbox-mail-count/actions/workflows/github-code-scanning/codeql)
 
 ## Отображение текущей погоды
 ![пример](example.jpg)
@@ -65,25 +63,6 @@ lang: "ru"
     color: @text;
     padding-right: 13px;
  }
-```
-
-## Структура проекта
-```
-wb-current-weather/
-├── cmd/
-│   └── app/
-│       └── main.go
-├── internal/
-|   ├── app/
-│       └── app.go           // Методы работы с приложением
-|   ├── config/              // Хранение конфигураций для всех частей проекта
-│   │   └── config.go
-|   ├── transport/           // Часть на получение внутри
-│   │   ├── http/
-|   ├── usecase/
-|   |   ├── forecast.go
-│   │   └── waybar.go
-
 ```
 
 ## Сборка deb-пакета

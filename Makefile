@@ -1,24 +1,14 @@
-setup:
-	go install golang.org/x/tools/cmd/goimports@latest
-	go install mvdan.cc/gofumpt@latest
-
 fmt:
 	go mod tidy
-	go fix -diff ./...
-	golangci-lint run --fix ./cmd/... ./internal/...
-
-test:
-	go test ./... -race -timeout=5m -v
-
-cover:
-	go test ./... -race -cover
+	go fix -diff main.go
+	golangci-lint run --fix main.go
 
 build:
 	$(MAKE) fmt
 	go env -w CGO_ENABLED=0
 	go env -w GOOS=linux
 	go env -w GOARCH=amd64
-	go build -o application ./cmd/app
+	go build -o application main.go
 
 build-deb:
 	@if [ -z "$(VERSION)" ]; then \
@@ -28,6 +18,6 @@ build-deb:
 	PACKAGE_VERSION="$(VERSION)" ./devops/build-deb.sh
 
 run:
-	go run ./cmd/app
+	go run main.go
 
 .PHONY: setup fmt test build cover run build-deb
