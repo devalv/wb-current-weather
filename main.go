@@ -14,12 +14,10 @@ import (
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
-	Debug           bool   `yaml:"debug"`
 	CityID          int    `yaml:"city_id"`
 	WeatherAPIToken string `yaml:"weather_api_token"`
 	Units           string `yaml:"units"`
@@ -40,8 +38,6 @@ func NewConfig() (*Config, error) {
 		return nil, fmt.Errorf("'%s' is a directory, not a file", cfgPath)
 	}
 
-	log.Debug().Msgf("Config path: %s", cfgPath)
-
 	cfg := &Config{
 		Units:  "metric",
 		Lang:   "ru",
@@ -53,34 +49,47 @@ func NewConfig() (*Config, error) {
 		return nil, fmt.Errorf("config read err: %w", err)
 	}
 
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	if cfg.Debug {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-		log.Debug().Msg("Debug mode is enabled")
-	}
-
-	log.Debug().Msgf("Config -> city_id: `%d`, units: `%s`, lang: `%s`", cfg.CityID, cfg.Units, cfg.Lang)
-
 	return cfg, nil
 }
 
-type Forecast struct {
-	Description string  `json:"description"`
-	Icon        string  `json:"icon"`
-	Temp        float32 `json:"temp"`
-	Wind        float32 `json:"wind"`
+type WaybarOutput struct {
+	Text    string `json:"text"`
+	Tooltip string `json:"tooltip"`
 }
 
-func (f *Forecast) TooltipInfo() []string {
+func (wo *WaybarOutput) String() string {
+	val, err := json.Marshal(wo)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to marshal waybar output")
+
+		return ""
+	}
+
+	return string(val)
+}
+
+type forecastResponse struct {
+	Weather []struct {
+		Description string `json:"description"`
+		Icon        string `json:"icon"`
+	} `json:"weather"`
+	Main struct {
+		Temp float32 `json:"temp"`
+	} `json:"main"`
+	Wind struct {
+		Speed float32 `json:"speed"`
+	} `json:"wind"`
+}
+
+func (f *forecastResponse) TooltipInfo() []string {
 	return []string{
-		fmt.Sprintf("🌡️: %.1f", f.Temp),
-		fmt.Sprintf("🌬: %.1f", f.Wind),
-		"📜: " + f.Description,
+		fmt.Sprintf("🌡️: %.1f", f.Main.Temp),
+		fmt.Sprintf("🌬: %.1f", f.Wind.Speed),
+		"📜: " + f.Weather[0].Description,
 	}
 }
 
-func (f *Forecast) Text() string {
+func (f *forecastResponse) Text() string {
 	iconRegistry := map[string]string{
 		"01d": "☀️",
 		"01n": "🌙",
@@ -102,50 +111,15 @@ func (f *Forecast) Text() string {
 		"50n": "🌫️",
 	}
 
-	i := iconRegistry[f.Icon]
+	i := iconRegistry[f.Weather[0].Icon]
 	if i == "" {
 		i = "🌡️"
 	}
 
-	return fmt.Sprintf("%.0f | %s", f.Temp, i)
+	return fmt.Sprintf("%.0f | %s", f.Main.Temp, i)
 }
 
-type WaybarOutput struct {
-	Text    string `json:"text"`
-	Tooltip string `json:"tooltip"`
-}
-
-func (wo *WaybarOutput) String() string {
-	val, err := json.Marshal(wo)
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to marshal waybar output")
-
-		return ""
-	}
-
-	return string(val)
-}
-
-type weatherForecast struct {
-	Description string `json:"description"`
-	Icon        string `json:"icon"`
-}
-
-type mainForecast struct {
-	Temp float32 `json:"temp"`
-}
-
-type windForecast struct {
-	Speed float32 `json:"speed"`
-}
-
-type forecastResponse struct {
-	Weather []weatherForecast `json:"weather"`
-	Main    mainForecast      `json:"main"`
-	Wind    windForecast      `json:"wind"`
-}
-
-func GetForecast(ctx context.Context, cfg *Config) (fc *Forecast, err error) {
+func GetForecast(ctx context.Context, cfg *Config) (fR *forecastResponse, err error) {
 	const timeout = 15 * time.Second
 	const apiURL = "https://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s&units=%s&lang=%s"
 
@@ -180,19 +154,11 @@ func GetForecast(ctx context.Context, cfg *Config) (fc *Forecast, err error) {
 	}
 
 	var f forecastResponse
-	err = json.NewDecoder(res.Body).Decode(&f)
-	if err != nil {
+	if err := json.NewDecoder(res.Body).Decode(&f); err != nil {
 		return nil, fmt.Errorf("error decoding http response body: %w", err)
 	}
 
-	log.Debug().Msg(fmt.Sprintf("server forecast: %v", f))
-
-	return &Forecast{
-		Description: f.Weather[0].Description,
-		Icon:        f.Weather[0].Icon,
-		Temp:        f.Main.Temp,
-		Wind:        f.Wind.Speed,
-	}, nil
+	return &f, nil
 }
 
 func run() error {
